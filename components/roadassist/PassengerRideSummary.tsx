@@ -233,21 +233,12 @@ export default function PassengerRideSummary({ ride: initialRide, user, onDone }
     };
   }, [waitingForPayment, ride?.id]);
 
-  // Stop polling when paid
+  // Auto-advance to rating when payment is confirmed or doesn't require confirmation
   useEffect(() => {
-    if (isPaid) {
-      if (pollRef.current) {
-        clearInterval(pollRef.current);
-        pollRef.current = null;
-      }
-      if (channelRef.current) {
-        try {
-          channelRef.current.unsubscribe();
-        } catch (_) {}
-        channelRef.current = null;
-      }
+    if (isCompleted && step === "summary" && !waitingForPayment && isPaid) {
+      setStep("rating");
     }
-  }, [isPaid]);
+  }, [isCompleted, step, waitingForPayment, isPaid]);
 
   // Keep the summary visible until the passenger explicitly continues to rating.
 

@@ -1092,7 +1092,7 @@ export default function DriverApp() {
       : 0;
 
     const hasServiceRates = base > 0 || perKm > 0 || perMinute > 0;
-    const useMinimumOnly = !hasServiceRates && minimumFare > 0;
+    const useMinimumOnly = !hasServiceRates;
 
     const variable = useMinimumOnly
       ? minimumFare
