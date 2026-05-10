@@ -1095,7 +1095,13 @@ export default function DriverApp() {
       ? ride.selected_extras.reduce((sum: number, extra: any) => sum + Number(extra?.price || 0), 0)
       : 0;
 
-    const variable = (base + perKm * Math.max(0, distanceKm) + perMinute * Math.max(0, durationMin)) * Math.max(1, surgeMultiplier);
+    const hasServiceRates = base > 0 || perKm > 0 || perMinute > 0;
+    const useMinimumOnly = !hasServiceRates && minimumFare > 0;
+
+    const variable = useMinimumOnly
+      ? minimumFare
+      : (base + perKm * Math.max(0, distanceKm) + perMinute * Math.max(0, durationMin)) * Math.max(1, surgeMultiplier);
+
     const computedFare = Math.max(variable, minimumFare) + selectedExtras;
     const finalPrice = parseFloat((computedFare > 0 ? computedFare : estimated).toFixed(2));
 

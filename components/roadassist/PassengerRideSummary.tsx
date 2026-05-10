@@ -325,7 +325,7 @@ export default function PassengerRideSummary({ ride: initialRide, user, onDone }
           </div>
 
           <div>
-            <h2 className="text-white font-black text-2xl">Esperando confirmación</h2>
+            <h2 className="text-white font-black text-2xl">Pagar a tu conductor</h2>
             <p className="text-white/50 text-sm mt-2 leading-relaxed">
               El conductor está confirmando el pago. Esta pantalla se actualizará automáticamente.
             </p>
