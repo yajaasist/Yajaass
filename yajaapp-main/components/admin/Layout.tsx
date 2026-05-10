@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { createPageUrl } from "@/utils";
 import { setSystemTimezone } from "@/components/shared/dateUtils";
 import { Menu, X, Share2, LogOut, ChevronDown, Lock
@@ -240,6 +241,9 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
     toast.success("Enlace de gestión copiado");
   };
 
+  const pathname = usePathname();
+  const normalizedPathname = pathname?.replace(/\/$/, "") || "";
+
   // Build navGroups from settings.nav_config or fallback to defaults
   const rawConfig = settings?.nav_config?.length > 0 ? settings.nav_config : DEFAULT_NAV_CONFIG;
   const pageMap = Object.fromEntries(ALL_PAGES.map(p => [p.page, p]));
@@ -365,11 +369,12 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
               </button>
 
               {!collapsed[group.label] && group.items.map((item: any) => {
-                const isActive = currentPageName === item.page;
+                const itemPath = createPageUrl(item.page).replace(/\/$/, "");
+                const isActive = currentPageName === item.page || normalizedPathname === itemPath;
                 return (
                   <Link
                     key={item.page}
-                    href={createPageUrl(item.page)}
+                    href={itemPath}
                     onClick={() => setSidebarOpen(false)}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all mb-0.5 ${
                       isActive ? "text-white font-medium shadow-sm" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
