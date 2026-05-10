@@ -39,7 +39,7 @@ import { clearLiveLocationWatch, getCurrentLiveLocation, watchLiveLocation, type
 import { ensureLocationPermission } from "@/lib/locationPermissions";
 import { locationTracker } from "@/lib/locationTracker";
 import { syncBrandHead } from "@/components/shared/brandHead";
-import { useDriverLocation } from "@/lib/useDriverLocationRealtime";
+import { useDriverLocation } from "@/lib/useDriverLocation";
 import { AnimatedMarker, SmoothMapPanner } from "@/components/shared/AnimatedMapComponents";
 import { getLocationPermissionState, getNotificationPermissionState, requestNotificationPermission } from "@/lib/permissionsService";
 
@@ -299,14 +299,10 @@ function HomeMap({
 }) {
   const isOnline = driver?.status === "available";
 
-  // Usar hook de ubicación en tiempo real
-  const { location: driverLocation, isLoading: locationLoading } = useDriverLocation({
-    driverId: driver?.id || null,
-    enabled: !!driver?.id && isOnline,
-  });
-
-  const lat = driverLocation?.latitude;
-  const lon = driverLocation?.longitude;
+  // Usar ubicación del driver directamente (ya actualizada por locationTracker en main)
+  // No usar hook realtime que depende de watchLiveLocation (no funciona en PWA)
+  const lat = driver?.latitude;
+  const lon = driver?.longitude;
   const center = lat && lon ? [lat, lon] : [19.4326, -99.1332];
   const mapRef = useRef<any>(null);
 
