@@ -170,7 +170,7 @@ export default function AssignDriverDialog({ ride, drivers = [], rides = [], ope
   // Combinar datos estáticos con ubicaciones en tiempo real
   const driversWithRealtimeLocation = useMemo(() => {
     return availableDrivers.map(driver => {
-      const realtimeLocation = driverLocations.find(loc => loc.id === driver.id);
+      const realtimeLocation = (driverLocations || []).find(loc => loc.id === driver.id);
       return realtimeLocation ? {
         ...driver,
         latitude: realtimeLocation.latitude,
